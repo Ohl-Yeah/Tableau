@@ -1,0 +1,61 @@
+
+PARAMETER: "Date Selection" {Calender Dates, Fiscal Dates}
+PARAMETER: "Time Slice" {Annual, Consecutive}
+PARAMETER: "Calculation Method" {Periodic, Cumulative}
+PARAMETER: "Date Detail Selection" {Week, Month, Quarter, Year}
+PARAMETER: "Booking Measure" {Booking Dollars, Booking Volume, Booking Qty}
+
+-----------
+
+"SELECTED DATE YEAR"
+IF [Date Selection] = 'Fiscal Dates' THEN
+    [Fiscal Year]
+ELSEIF [Date Selection] = 'Calendar Dates' THEN
+    YEAR( [Order Date] )
+END
+
+-------
+
+"SELECTED BOOKING MEASURE"
+CASE [Calculation Method] 
+WHEN 'Periodic' THEN
+    IF [Booking Measure] = 'Booking Dollars' THEN
+        SUM([Gross Total Booking Value])
+    ELSEIF [Booking Measure] = 'Booking Volume' THEN
+        SUM([Order Qty])
+    ELSEIF [Booking Measure] = 'Booking Knife Qty' THEN
+        SUM([Knife Qty])
+    END
+WHEN 'Cumulative' THEN
+    IF [Booking Measure] = 'Booking Dollars' THEN
+        RUNNING_SUM(SUM([Gross Total Booking Value]))
+    ELSEIF [Booking Measure] = 'Booking Volume' THEN
+        RUNNING_SUM(SUM([Order Qty]))
+    ELSEIF [Booking Measure] = 'Booking Knife Qty' THEN
+        RUNNING_SUM(SUM([Knife Qty]))
+    END
+END
+
+--------
+
+"Selected Booking Measure"
+CASE [Calculation Method]
+WHEN 'Periodic' THEN
+    IF [Booking Measure] = 'Booking Dollars' THEN
+        SUM([Gross Total Booking Value])
+    ELSEIF [Booking Measure] = 'Booking Volume' THEN
+        SUM([Order Qty])
+    ELSEIF [Booking Measure] = 'Booking Knife Qty' THEN
+        SUM([Knife Qty])
+    END
+WHEN 'Cumulative' THEN
+    IF [Booking Measure] = 'Booking Dollars' THEN
+        RUNNING_SUM(SUM([Gross Total Booking Value]))
+    ELSEIF [Booking Measure] = 'Booking Volume' THEN
+        RUNNING_SUM(SUM([Order Qty]))
+    ELSEIF [Booking Measure] = 'Booking Knife Qty' THEN
+        RUNNING_SUM(SUM([Knife Qty]))
+    END
+END
+
+
